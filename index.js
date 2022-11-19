@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { MongoClient } from 'mongodb'
 import joi from 'joi'
+import bcrypt from 'bcrypt'
 
 //config:
 const app = express()
@@ -28,19 +29,18 @@ const usersColl = db.collection("users")
 const userSchema = joi.object({
     name: joi.string().required(),
     email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
-    password: joi.required,
+    password: joi.required(),
     confirmp: joi.required()
 })
 
-
+//routes
 app.post('/sign-up', async (req, res) => {
     const {name, email, password, confirmp} = req.body
 
-    const alreadyExists = usersColl.findOne({email})
+    const alreadyExists = await usersColl.findOne({email:email})
 
     if(alreadyExists){
-        res.status(422).send("Esse email já foi cadastrado.")
-        return
+        res.send(alreadyExists)
     }
 
 
@@ -49,11 +49,14 @@ app.post('/sign-up', async (req, res) => {
         return
     }
 
+    const passwordHash = bcrypt.hashSync(password, 10)
 
     const user = {
         name: name,
         email: email,
-        password: password
+        password: passwordHash,
+        confirmp: passwordHash
+
     }
 
     const validation = userSchema.validate(user, {abortEarly: false})
@@ -61,13 +64,18 @@ app.post('/sign-up', async (req, res) => {
     if(validation.error){
         const errors = validation.error.details.map( (detail)=> detail.message)
         res.status(422).send("Preencha os campos corretamente")
+        console.log(errors)
         return
     }
 
 
 
     try{
-        await usersColl.insertOne({user})
+        await usersColl.insertOne({
+            name: user.name,
+            email:user.email,
+            password:user.password
+        })
         res.status(201).send("Created")
     }
     catch(err){
