@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { MongoClient } from 'mongodb'
 import joi from 'joi'
 import bcrypt from 'bcrypt'
+import {v4 as uuidV4} from 'uuid'
 
 //config:
 const app = express()
@@ -24,13 +25,19 @@ let db = mongoClient.db("wallet")
 
 //globals
 const usersColl = db.collection("users")
+const sessionsColl = db.collection("sessions")
 
 //schemas
-const userSchema = joi.object({
+const signupSchema = joi.object({
     name: joi.string().required(),
     email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
     password: joi.required(),
     confirmp: joi.required()
+})
+
+const signinSchema = joi.object({
+    email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
+    password: joi.required(),
 })
 
 //routes
@@ -40,7 +47,8 @@ app.post('/sign-up', async (req, res) => {
     const alreadyExists = await usersColl.findOne({email:email})
 
     if(alreadyExists){
-        res.send(alreadyExists)
+        res.status(400).send("Email já cadastrado.")
+        return
     }
 
 
@@ -59,7 +67,7 @@ app.post('/sign-up', async (req, res) => {
 
     }
 
-    const validation = userSchema.validate(user, {abortEarly: false})
+    const validation = signupSchema.validate(user, {abortEarly: false})
 
     if(validation.error){
         const errors = validation.error.details.map( (detail)=> detail.message)
@@ -83,6 +91,42 @@ app.post('/sign-up', async (req, res) => {
     }
     
 })
+
+app.post('/', async (req, res) => {
+    const {email, password} = req.body
+    const token = uuidV4()
+
+    const validation = signinSchema.validate(req.body, {abortEarly: false})
+
+if(validation.error){
+    const errors = validation.error.details.map( (detail)=> detail.message)
+    res.status(422).send("Preencha os campos corretamente")
+    console.log(errors)
+    return
+}
+
+
+   const user = await usersColl.findOne({email})
+   
+   if(user && bcrypt.compareSync(password, user.password)){
+    
+    await sessionsColl.insertOne({
+        token,
+        userId: user._id
+    })
+
+    res.send({token})
+
+
+   }else{
+    res.status(401).send("Usuário ou senha incorretos.")
+   }
+
+
+
+
+})
+
 
 
 app.listen(process.env.PORT, () => console.log(`Server running on port: ${process.env.PORT}.`))
