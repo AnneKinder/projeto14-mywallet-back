@@ -20,6 +20,35 @@ catch(err){
 
 let db = mongoClient.db("wallet")
 
+//globals
+const usersColl = db.collection("users")
+
+
+app.post('/sign-up', async (req, res) => {
+    const {name, email, password, confirmp} = req.body
+
+
+    if(password != confirmp){
+        res.status(501).send("As senhas não conferem!")
+        return
+    }
+
+
+    const user = {
+        name: name,
+        email: email,
+        password: password
+    }
+
+    try{
+        await usersColl.insertOne({user})
+        res.status(201).send("Created")
+    }
+    catch(err){
+        console.log(err)
+    }
+    
+})
 
 
 app.listen(process.env.PORT, () => console.log(`Server running on port: ${process.env.PORT}.`))
