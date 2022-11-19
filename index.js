@@ -36,12 +36,19 @@ const userSchema = joi.object({
 app.post('/sign-up', async (req, res) => {
     const {name, email, password, confirmp} = req.body
 
+    const alreadyExists = usersColl.findOne({email})
+
+    if(alreadyExists){
+        res.status(422).send("Esse email já foi cadastrado.")
+        return
+    }
 
 
     if(password != confirmp){
-        res.status(501).send("As senhas não conferem!")
+        res.status(400).send("As senhas não conferem!")
         return
     }
+
 
     const user = {
         name: name,
@@ -56,6 +63,8 @@ app.post('/sign-up', async (req, res) => {
         res.status(422).send("Preencha os campos corretamente")
         return
     }
+
+
 
     try{
         await usersColl.insertOne({user})
