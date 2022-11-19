@@ -154,6 +154,32 @@ app.post("/new-exit", async (req, res) => {
     }
   });
 
+app.get("/feed", async (req, res) => {
+    const {authorization} = req.headers
+    const token = authorization?.replace("Bearer", "")
+
+    if(!token){
+        res.sendStatus(500)
+        return
+    }  
+
+    const session = await sessionsColl.findOne({token})
+
+    if(!session){
+        res.sendStatus(401)
+        return
+    }
+
+    const pgteste = await movementsColl.find().toArray()
+    if(pgteste){
+        res.send(pgteste)
+    }else{
+    res.sendStatus(401)
+    }
+
+
+
+})
 
 
 app.listen(process.env.PORT, () =>
