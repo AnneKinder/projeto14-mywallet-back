@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import db from "./db.js"
 import joi from "joi";
-import { signIn, signUp } from "./controllers/authController.js";
-import { getFeed } from "./controllers/feedController.js";
 import { newEntry, newExit } from "./controllers/addController.js";
 import authRouter from './routes/authRouter.js';
+import feedRouter from "./routes/feedRouter.js";
+import addRouter from "./routes/addRouter.js";
 
 //config:
 const app = express();
@@ -37,13 +37,8 @@ export const movementSchema = joi.object({
 
 //routes
 app.use(authRouter)
-
-
-app.post("/new-entry", newEntry);
-
-app.post("/new-exit", newExit );
-
-app.get("/feed", getFeed)
+app.use(addRouter)
+app.use(feedRouter)
 
 
 app.listen(process.env.PORT, () =>
