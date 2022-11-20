@@ -1,7 +1,6 @@
-import joi from "joi";
 import bcrypt from "bcrypt";
 import { v4 as uuidV4 } from "uuid";
-import {db, usersColl, sessionsColl,signupSchema, signinSchema } from "../index.js"
+import {usersColl, sessionsColl,signupSchema, signinSchema } from "../index.js"
 
 
 export async function signUp (req, res){

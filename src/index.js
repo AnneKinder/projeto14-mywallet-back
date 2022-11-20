@@ -6,6 +6,7 @@ import joi from "joi";
 import bcrypt from "bcrypt";
 import { v4 as uuidV4 } from "uuid";
 import { signIn, signUp } from "./controllers/authController.js";
+import { getFeed } from "./controllers/feedController.js";
 
 //config:
 const app = express();
@@ -87,33 +88,7 @@ app.post("/new-exit", async (req, res) => {
     }
   });
 
-app.get("/feed", async (req, res) => {
-    const {authorization} = req.headers
-    const token = authorization?.replace("Bearer", "")
-
-    if(!token){
-        res.sendStatus(500)
-        return
-    }  
-
-    const session = await sessionsColl.find({token})
-
-    if(!session){
-        res.status(401).send(token)
-        
-        return
-    }
-
-    const moveArray = await movementsColl.find()
-    if(moveArray){
-        res.send(moveArray)
-    }else{
-    res.sendStatus(401)
-    }
-
-
-
-})
+app.get("/feed", getFeed)
 
 
 app.listen(process.env.PORT, () =>
