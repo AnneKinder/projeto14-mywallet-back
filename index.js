@@ -113,7 +113,7 @@ app.post("/", async (req, res) => {
       userId: user._id,
     });
 
-    res.send({ token, userId });
+    res.send({ user, token });
   } else {
     res.status(401).send("Usuário ou senha incorretos.");
   }
@@ -164,14 +164,15 @@ app.get("/feed", async (req, res) => {
         return
     }  
 
-    const session = await sessionsColl.findOne({token})
+    const session = await sessionsColl.find({token})
 
     if(!session){
-        res.sendStatus(401)
+        res.status(401).send(token)
+        
         return
     }
 
-    const moveArray = await movementsColl.find().toArray()
+    const moveArray = await movementsColl.find()
     if(moveArray){
         res.send(moveArray)
     }else{
