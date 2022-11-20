@@ -105,6 +105,7 @@ app.post("/", async (req, res) => {
   }
 
   const user = await usersColl.findOne({ email });
+  const userId = user._id
 
   if (user && bcrypt.compareSync(password, user.password)) {
     await sessionsColl.insertOne({
@@ -112,7 +113,7 @@ app.post("/", async (req, res) => {
       userId: user._id,
     });
 
-    res.send({ token });
+    res.send({ token, userId });
   } else {
     res.status(401).send("Usuário ou senha incorretos.");
   }
@@ -170,9 +171,9 @@ app.get("/feed", async (req, res) => {
         return
     }
 
-    const pgteste = await movementsColl.find().toArray()
-    if(pgteste){
-        res.send(pgteste)
+    const moveArray = await movementsColl.find().toArray()
+    if(moveArray){
+        res.send(moveArray)
     }else{
     res.sendStatus(401)
     }
