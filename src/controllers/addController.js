@@ -1,4 +1,4 @@
-import { movementSchema, movementsColl  } from "../index.js";
+import { movementsColl  } from "../index.js";
 
 export async function newEntry (req, res) {
     try {
