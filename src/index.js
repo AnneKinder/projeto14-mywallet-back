@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import { MongoClient } from "mongodb";
+import db from "./db.js"
 import joi from "joi";
 import { signIn, signUp } from "./controllers/authController.js";
 import { getFeed } from "./controllers/feedController.js";
@@ -9,19 +8,8 @@ import { newEntry, newExit } from "./controllers/addController.js";
 
 //config:
 const app = express();
-dotenv.config();
 app.use(express.json());
 app.use(cors());
-
-//mongo:
-const mongoClient = new MongoClient(process.env.MONGO_URI);
-try {
-  await mongoClient.connect();
-} catch (err) {
-  console.log(err);
-}
-
-export const db = mongoClient.db("wallet");
 
 //globals
 export const usersColl = db.collection("users");

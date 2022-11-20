@@ -1,6 +1,5 @@
 import { sessionsColl, movementsColl } from "../index.js"
 
-
 export async function getFeed (req, res) {
     const {authorization} = req.headers
     const token = authorization?.replace("Bearer", "")
