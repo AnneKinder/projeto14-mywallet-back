@@ -18,12 +18,12 @@ export const sessionsColl = db.collection("sessions");
 export const movementsColl = db.collection("movements");
 
 //schemas
- export const signupSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
-  password: joi.required(),
-  confirmp: joi.required(),
-});
+//  export const signupSchema = joi.object({
+//   name: joi.string().required(),
+//   email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
+//   password: joi.required(),
+//   confirmp: joi.required(),
+// });
 
 export const signinSchema = joi.object({
   email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),

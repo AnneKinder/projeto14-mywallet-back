@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { v4 as uuidV4 } from "uuid";
-import {usersColl, sessionsColl,signupSchema, signinSchema } from "../index.js"
+import {usersColl, sessionsColl, signinSchema } from "../index.js"
 
 export async function signUp (req, res){
     const { name, email, password, confirmp } = req.body;
@@ -26,14 +26,14 @@ export async function signUp (req, res){
       confirmp: passwordHash,
     };
   
-    const validation = signupSchema.validate(user, { abortEarly: false });
+    // const validation = signupSchema.validate(user, { abortEarly: false });
   
-    if (validation.error) {
-      const errors = validation.error.details.map((detail) => detail.message);
-      res.status(422).send("Preencha os campos corretamente");
-      console.log(errors);
-      return;
-    }
+    // if (validation.error) {
+    //   const errors = validation.error.details.map((detail) => detail.message);
+    //   res.status(422).send("Preencha os campos corretamente");
+    //   console.log(errors);
+    //   return;
+    // }
   
     try {
       await usersColl.insertOne({
