@@ -1,8 +1,7 @@
 import signupSchema from "../schemas/signupSchema.js";
 
 export function signUpValidationMiddleware (req, res, next){
-
-    
+ 
     const user = {
         name: name,
         email: email,
@@ -20,6 +19,5 @@ export function signUpValidationMiddleware (req, res, next){
       }
       
       next()
-
 
 }
