@@ -25,16 +25,6 @@ password: joi.required(),
 confirmp: joi.required(),
 });
 
-// export const signinSchema = joi.object({
-//   email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
-//   password: joi.required(),
-// });
-
-export const movementSchema = joi.object({
-  valor: joi.number().required(),
-  descricao: joi.required(),
-});
-
 //routes
 app.use(authRouter)
 app.use(addRouter)
