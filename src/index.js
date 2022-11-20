@@ -5,6 +5,7 @@ import joi from "joi";
 import { signIn, signUp } from "./controllers/authController.js";
 import { getFeed } from "./controllers/feedController.js";
 import { newEntry, newExit } from "./controllers/addController.js";
+import authRouter from './routes/authRouter.js';
 
 //config:
 const app = express();
@@ -35,9 +36,8 @@ export const movementSchema = joi.object({
 });
 
 //routes
-app.post("/sign-up", signUp);
+app.use(authRouter)
 
-app.post("/", signIn);
 
 app.post("/new-entry", newEntry);
 
