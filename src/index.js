@@ -3,10 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 import joi from "joi";
-import bcrypt from "bcrypt";
-import { v4 as uuidV4 } from "uuid";
 import { signIn, signUp } from "./controllers/authController.js";
 import { getFeed } from "./controllers/feedController.js";
+import { newEntry, newExit } from "./controllers/addController.js";
 
 //config:
 const app = express();
@@ -52,41 +51,9 @@ app.post("/sign-up", signUp);
 
 app.post("/", signIn);
 
-app.post("/new-entry", async (req, res) => {
-  const validation = movementSchema.validate(req.body, { abortEarly: false });
+app.post("/new-entry", newEntry);
 
-  if (validation.error) {
-    const errors = validation.error.details.map((detail) => detail.message);
-    res.status(422).send("Preencha os campos corretamente");
-    console.log(errors);
-    return;
-  }
-
-  try {
-    await movementsColl.insertOne({ ...req.body, type: "entry" });
-    res.status(201).send("Entry sent.");
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-app.post("/new-exit", async (req, res) => {
-    const validation = movementSchema.validate(req.body, { abortEarly: false });
-  
-    if (validation.error) {
-      const errors = validation.error.details.map((detail) => detail.message);
-      res.status(422).send("Preencha os campos corretamente");
-      console.log(errors);
-      return;
-    }
-  
-    try {
-      await movementsColl.insertOne({ ...req.body, type: "exit" });
-      res.status(201).send("Exit sent.");
-    } catch (err) {
-      console.log(err);
-    }
-  });
+app.post("/new-exit", newExit );
 
 app.get("/feed", getFeed)
 
