@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { getFeed } from "../controllers/feedController.js";
 
-const feedRouter = Router()
+const feedRouter = Router();
 
-feedRouter.get("/feed", getFeed)
+feedRouter.get("/feed", getFeed);
 
-export default feedRouter
+export default feedRouter;

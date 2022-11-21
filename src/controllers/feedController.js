@@ -1,40 +1,36 @@
-import { sessionsColl, movementsColl, usersColl } from "../index.js"
+import { sessionsColl, movementsColl, usersColl } from "../index.js";
 
-export async function getFeed (req, res) {
-    const {authorization} = req.headers
-    const token = authorization?.replace("Bearer ", "")
+export async function getFeed(req, res) {
+  const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
 
-    if(!token){
-        res.sendStatus(500)
-        return
-    }  
+  if (!token) {
+    res.sendStatus(500);
+    return;
+  }
 
-    const session = await sessionsColl.findOne({token})
-    console.log(session)
-    if(!session){
-        res.sendStatus(401)
-        return
-    }
+  const session = await sessionsColl.findOne({ token });
+  console.log(session);
+  if (!session) {
+    res.sendStatus(401);
+    return;
+  }
 
-    const userId = session.userId
-    const user = await usersColl.findOne({_id: userId})
-   
-    
-    if(!user){
-        res.sendStatus(404)
-        return
-    }
+  const userId = session.userId;
+  const user = await usersColl.findOne({ _id: userId });
 
-    const userEmail = user.email
+  if (!user) {
+    res.sendStatus(404);
+    return;
+  }
 
-    const movesArray = await movementsColl.find({email: userEmail}).toArray()
+  const userEmail = user.email;
 
-    if(movesArray){
-        res.send(movesArray)
-    }else{
-    res.sendStatus(401)
-    }
+  const movesArray = await movementsColl.find({ email: userEmail }).toArray();
 
-
-
+  if (movesArray) {
+    res.send(movesArray);
+  } else {
+    res.sendStatus(401);
+  }
 }
