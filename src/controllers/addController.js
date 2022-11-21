@@ -13,6 +13,7 @@ export async function newEntry (req, res) {
   
     try {
       await movementsColl.insertOne({ ...req.body, type: "exit" });
+      console.log(req.body)
       res.status(201).send("Exit sent.");
     } catch (err) {
       console.log(err);
