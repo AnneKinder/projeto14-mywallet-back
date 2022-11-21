@@ -5,10 +5,10 @@ import movementSchema from "../schemas/movementSchema.js";
 export function signUpValidationMiddleware (req, res, next){
  
     const user = {
-        name: name,
-        email: email,
-        password: passwordHash,
-        confirmp: passwordHash,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        confirmp: req.body.confirmp
       };
 
       const validation = signupSchema.validate(user, { abortEarly: false });

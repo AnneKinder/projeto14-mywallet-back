@@ -4,7 +4,7 @@ import { signUpValidationMiddleware, signinValidationMiddleware } from "../middl
 
 const authRouter = Router()
 
-authRouter.post("/sign-up",  signUp)
+authRouter.post("/sign-up", signUpValidationMiddleware, signUp)
 authRouter.post("/", signinValidationMiddleware ,signIn)
 
 export default authRouter
