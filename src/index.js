@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import db from "./db.js"
-import joi from "joi";
-import { newEntry, newExit } from "./controllers/addController.js";
 import authRouter from './routes/authRouter.js';
 import feedRouter from "./routes/feedRouter.js";
 import addRouter from "./routes/addRouter.js";
@@ -16,14 +14,6 @@ app.use(cors());
 export const usersColl = db.collection("users");
 export const sessionsColl = db.collection("sessions");
 export const movementsColl = db.collection("movements");
-
-//schemas
-// export const signupSchema = joi.object({
-// name: joi.string().required(),
-// email: joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
-// password: joi.required(),
-// confirmp: joi.required(),
-// });
 
 //routes
 app.use(authRouter)

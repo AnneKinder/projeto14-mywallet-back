@@ -25,16 +25,7 @@ export async function signUp (req, res){
       password: passwordHash,
       confirmp: passwordHash,
     };
-  
-//     const validation = signupSchema.validate(user, { abortEarly: false });
-  
-//   if (validation.error) {
-//   const errors = validation.error.details.map((detail) => detail.message);
-//   res.status(422).send("Preencha os campos corretamente");
-//   console.log(errors);
-//  return;
-// }
-  
+
     try {
       await usersColl.insertOne({
         name: user.name,
