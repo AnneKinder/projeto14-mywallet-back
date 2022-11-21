@@ -4,7 +4,8 @@ import joi from 'joi';
     valor: joi.number().required(),
     descricao: joi.required(),
     data:joi.required(),
-    type: joi.required()
+    type: joi.required(),
+    email:joi.required()
   });
   
 

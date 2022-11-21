@@ -31,7 +31,7 @@ export function signinValidationMiddleware (req,res,next){
   
     if (validation.error) {
       const errors = validation.error.details.map((detail) => detail.message);
-      res.status(422).send("Preencha os campos corretamente");
+      res.status(422).send("Faltam dados para envio.");
       console.log(errors);
       return;
     }
@@ -45,7 +45,7 @@ export function movementValidationMiddleware (req,res,next){
   
     if (validation.error) {
       const errors = validation.error.details.map((detail) => detail.message);
-      res.status(422).send("Preencha os campos corretamente");
+      res.status(422).send("Faltam dados para envio.");
       console.log(errors);
       return;
     }
