@@ -29,23 +29,8 @@ export async function getFeed (req, res) {
 
     const movesArray = await movementsColl.find({email: userEmail}).toArray()
 
-    let entries = await movementsColl.find({"type": "entry"}, {"email": userEmail}).toArray()
-    let exits = await movementsColl.find({"type": "exit"}, {"email": userEmail}).toArray()
-
-    let saldo = 0
-    entries.forEach((obj) => {
-       saldo+= Number(obj.valor)
-    })
-    exits.forEach((obj) => {
-        saldo-= Number(obj.valor)
-     })
-    console.log(saldo)
-
-    
-
-   
     if(movesArray){
-        res.send([movesArray, saldo])
+        res.send(movesArray)
     }else{
     res.sendStatus(401)
     }
